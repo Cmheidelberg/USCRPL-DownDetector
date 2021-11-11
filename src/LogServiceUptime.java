@@ -1,20 +1,21 @@
 
 import java.net.*;
+
 import java.io.*;
 
 public class LogServiceUptime implements Runnable {
 
-	
+	private static DatabaseHandler db = new DatabaseHandler();
+	private Service service;
 	private URL url = null;
-	private String ip;
 	
-	public LogServiceUptime(String ip) {
-		System.out.println("Construct: " + ip);
-		this.ip = ip;
+	public LogServiceUptime(Service service) {
+		System.out.println("Construct: " + service.getServiceURL());
+		this.service = service;
 		try {
-			this.url = new URL(ip);
+			this.url = new URL(service.getServiceURL());
 		} catch (MalformedURLException mue) {
-			System.out.println("Error constructing URL for: " + ip);
+			System.out.println("Error constructing URL for: " + service.getServiceName());
 		}
 		
 	}
@@ -26,11 +27,11 @@ public class LogServiceUptime implements Runnable {
 				HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 				connection.setRequestMethod("GET");
 				connection.connect();
-
-				int code = connection.getResponseCode();
-				System.out.println("[" + ip + "] Response code: " + code);
+				ResponseCode response = new ResponseCode(-1, service.getServiceId(), connection.getResponseCode());
+				db.insertResponseCode(response);
+				System.out.println("[" + service.getServiceName() + "] Response code: " + response.getResponseCode());
 			} catch(IOException ioe) {
-				System.out.println("Error parsing url for: " + ip);
+				System.out.println("Error parsing url for: " + service.getServiceName());
 			} 
 		}
 	}

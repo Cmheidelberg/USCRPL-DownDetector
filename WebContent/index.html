@@ -5,21 +5,57 @@
 </head>  
 <script>
 
-//Call login servlet and redirect to homepage if valid. Else display invalid login msg
-function loginJs(uname,pwd){
-	document.getElementById('invalid_login').innerHTML = "";
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "DownDetector", true );
-    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xmlHttp.send();
-}
+	//Call login servlet and redirect to homepage if valid. Else display invalid login msg
+	function addService(test){
+		//alert("AddService: " + "AddService?name=" + document.getElementById('serviceName').value + "&url=" + document.getElementById('serviceUrl').value);
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open("POST", "AddService?name=" + document.getElementById('serviceName').value + "&url=" + document.getElementById('serviceUrl').value, true );
+	    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	    xmlHttp.send();
+	}
+	
+	function initiate(){
+		//alert("initiate");
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open("GET", "DownDetector", true);
+	    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	    xmlHttp.send();
+	}
+	
+	function getStatus() {
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open("GET", "DownDetector", true);
+	    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	    xmlHttp.send();
+	    xmlHttp.onreadystatechange = function() {
+	    	if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+	    		document.getElementById('onlineStatus').innerHTML = this.responseText; 
+	    	}
+	    }
+	}
 
 </script>
-<body>  
-<h1>USCRPL Down Detector</h1>  
+<body onload="getStatus()">  
 
-<form name="login" onsubmit="loginJs();return false">
-	<input class="cool-button" type="submit" value="Start Background Service"> <span id="invalid_login"></span><br>
-</form>
+	<h1>USCRPL Down Detector</h1>  
+	
+	<form name="addServiceForm" onsubmit="addService('test');return false">
+		<p>Name:</p>
+		<div class="text-box"> 
+			<input type="text" id="serviceName" name="name" required><br><br>
+		</div>
+		<p>URL:</p> 
+		<div class="text-box"> 
+	  		<input type="text" id="serviceUrl" name="url"> required <br><br>
+	  	</div>
+	  	<br>
+		<input class="cool-button" type="submit" value="Start Background Service"> <span id="invalid_login"></span><br>
+	</form>
+	
+	<br><br>
+	
+	<div id="onlineStatus">
+	</div>
+	
 </body>  
 </html> 
