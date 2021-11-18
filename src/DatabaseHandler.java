@@ -7,20 +7,26 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.io.File;  
+import java.io.FileNotFoundException;
+import java.util.Scanner; 
 public class DatabaseHandler {
 
 	Connection conn = null;
 	Statement st = null;
 	PreparedStatement ps = null;
 	ResultSet rs = null;
+	final String DB_FILE_NAME = "database_connection_line.txt";
+
 	
 	public DatabaseHandler() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/down_detector?user=root&password=root");
-			st = conn.createStatement();
-			
+			String line = "jdbc:mysql://localhost/down_detector?user=root&password=root";
+		    if (line != null) {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				conn = DriverManager.getConnection(line);
+				st = conn.createStatement();
+		    }			
 		} catch(SQLException sqle) {
 			System.out.println ("SQLException: " + sqle.getMessage());
 		} catch (ClassNotFoundException cnfe) {

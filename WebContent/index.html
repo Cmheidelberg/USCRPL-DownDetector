@@ -35,6 +35,93 @@
 	}
 
 </script>
+
+<style>
+
+.status-div {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 140px;
+	float: none;
+	border-radius: 10px;
+  	border: 2px solid grey;
+  	padding: 5px 0px;
+}
+
+.status-box-green {
+  height: 55px;
+  width: 2.1%;
+  background-color: green;
+  border: 1px;
+  margin: 1.3px;
+  float: left;
+  border-radius: 2.5px;
+}
+
+.status-box-orange {
+  height: 55px;
+  width: 2.1%;
+  background-color: orange;
+  border: 1px;
+  margin: 1.3px;
+  float: left;
+  border-radius: 2.5px;
+}
+
+.status-box-red {
+  height: 55px;
+  width: 2.1%;
+  background-color: red;
+  border: 1px;
+  margin: 1.3px;
+  float: left;
+  border-radius: 2.5px;
+}
+
+.status-box-container {
+	display : flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0px 10px;
+}
+
+.status-date-range {
+	margin: 0px 15px;
+	padding: 5px 0px;
+	clear: both;
+}
+.status-box-info {
+	font-size: 20px;
+	font-weight: bold;
+	height: 22px;
+	margin: 0px 10px;
+}
+
+.status-box-green:hover {
+  background-color: pink;
+}
+
+.status-box-orange:hover {
+  background-color: pink;
+}
+
+.status-box-red:hover {
+  background-color: pink;
+}
+.red {
+  background-color: red;
+}
+
+hr {
+	width: 100%;
+    border: none;
+    height: 2px;
+    padding 0px;
+    background-color: grey;
+}
+
+</style>
 <body onload="getStatus()">  
 
 	<h1>USCRPL Down Detector</h1>  
@@ -46,7 +133,7 @@
 		</div>
 		<p>URL:</p> 
 		<div class="text-box"> 
-	  		<input type="text" id="serviceUrl" name="url"> required <br><br>
+	  		<input type="text" id="serviceUrl" name="url" required><br><br>
 	  	</div>
 	  	<br>
 		<input class="cool-button" type="submit" value="Start Background Service"> <span id="invalid_login"></span><br>
@@ -54,8 +141,8 @@
 	
 	<br><br>
 	
-	<div id="onlineStatus">
-	</div>
+	<div id="onlineStatus">empty</div>
+	
 	
 </body>  
 </html> 

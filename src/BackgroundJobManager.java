@@ -1,5 +1,4 @@
 import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
 
 import java.util.concurrent.*;
 
@@ -12,7 +11,7 @@ public class BackgroundJobManager implements ServletContextListener {
     	DatabaseHandler db = new DatabaseHandler();
     	for (int i = 1; i <= db.getElementCount("service"); i++) {
     		LogServiceUptime ls = new LogServiceUptime(db.getService(i));
-    		scheduler.scheduleAtFixedRate(ls, 0, 10, TimeUnit.SECONDS);
+    		scheduler.scheduleAtFixedRate(ls, 0, 1120, TimeUnit.SECONDS);
     		System.out.println(scheduler);
     		initiatedJobs++;	
     	}   
@@ -21,7 +20,7 @@ public class BackgroundJobManager implements ServletContextListener {
     public void addContext(int serviceId) {
     	DatabaseHandler db = new DatabaseHandler();
     	LogServiceUptime ls = new LogServiceUptime(db.getService(serviceId));
-    	scheduler.scheduleAtFixedRate(ls, 0, 10, TimeUnit.SECONDS);
+    	scheduler.scheduleAtFixedRate(ls, 0, 1120, TimeUnit.SECONDS);
     	initiatedJobs++;
     }
     
