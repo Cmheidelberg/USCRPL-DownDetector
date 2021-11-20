@@ -21,16 +21,20 @@
 	    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	    xmlHttp.send();
 	}
-	
-	function getStatus() {
+		
+	function getStatus(timeDiff,serviceName) {
 	    var xmlHttp = new XMLHttpRequest();
-	    xmlHttp.open("GET", "DownDetector", true);
+	    xmlHttp.open("GET", "DownDetector?timeDiff=" + timeDiff + "&serviceName=" + serviceName, true);
 	    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	    xmlHttp.send();
 	    xmlHttp.onreadystatechange = function() {
 	    	if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-	    		document.getElementById('onlineStatus').innerHTML = this.responseText; 
-	    	}
+	    		if(serviceName == 'all' || serviceName == 'null') {
+   					document.getElementById('onlineStatus').innerHTML = this.responseText;
+	    		} else {
+	    			document.getElementById(serviceName).innerHTML = this.responseText;
+	    		}
+	    	} 
 	    }
 	}
 
@@ -79,6 +83,16 @@
   border-radius: 2.5px;
 }
 
+.status-box-grey {
+  height: 55px;
+  width: 2.1%;
+  background-color: grey;
+  border: 1px;
+  margin: 1.3px;
+  float: left;
+  border-radius: 2.5px;
+}
+
 .status-box-container {
 	display : flex;
 	align-items: center;
@@ -109,6 +123,11 @@
 .status-box-red:hover {
   background-color: pink;
 }
+
+.status-box-grey:hover {
+  background-color: pink;
+}
+
 .red {
   background-color: red;
 }
@@ -122,7 +141,7 @@ hr {
 }
 
 </style>
-<body onload="getStatus()">  
+<body onload="getStatus(1000 * 60 * 60 * 24 * 30, 'all')">  
 
 	<h1>USCRPL Down Detector</h1>  
 	

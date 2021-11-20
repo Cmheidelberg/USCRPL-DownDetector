@@ -63,6 +63,24 @@ public class DatabaseHandler {
 		return count;
 	}
 	
+	public int getLastServiceIndex() {
+		String querey = "SELECT * FROM Service ORDER BY service_id DESC LIMIT 1";
+		System.out.println(querey);
+		
+		int count = -1;
+		try {
+			ResultSet rs = getResultSet(querey);
+			if(rs.next()) {
+				count = rs.getInt("service_id");
+			}else {
+				System.out.println("Error: Could not get last element from service table.");
+			}
+		} catch (SQLException sqle) {
+			System.out.println("SQLE: " + sqle);
+		}
+		return count;
+	}
+	
 	
 	public boolean initializeService(String serviceName, String serviceURL) {
 		
@@ -77,6 +95,37 @@ public class DatabaseHandler {
 			System.out.println("SQLE: " + sqle);
 			return false;
 		}
+	}
+	
+	
+	public ArrayList<ResponseCode> getResponsesBetweenTime(Long start, Long end, int serviceId) {
+		SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startTime = dateSdf.format(start);
+		String endTime = dateSdf.format(end);
+		
+		String querey = String.format("SELECT * FROM uptime WHERE service_id=%s AND ping_date >= \"%s\" AND ping_date <= \"%s\"",serviceId, startTime, endTime);
+		//System.out.println(querey);
+		
+		ArrayList<ResponseCode> responseCodes = new ArrayList<ResponseCode>();
+		try {
+			ResultSet rs = getResultSet(querey);
+			
+			while(rs.next()) {
+				//System.out.println("ServiceID: " + rs.getInt("service_id") + " | Response_code: " + rs.getInt("response_code"));
+					
+				int pid = rs.getInt("service_id");
+				int rid = rs.getInt("response_code");
+				String  date = rs.getString("ping_date");
+				ResponseCode responseCode = new ResponseCode(pid, serviceId, rid, date);
+				responseCodes.add(responseCode);
+			}
+		} catch (SQLException sqle) {
+			System.out.println("SQLE: " + sqle);
+		} catch (NullPointerException npe) {
+			//System.out.println("Returned null!");
+			return responseCodes;
+		}
+		return responseCodes;
 	}
 	
 	
@@ -136,8 +185,9 @@ public class DatabaseHandler {
 					
 				int pid = rs.getInt("service_id");
 				int rid = rs.getInt("response_code");
+				String date = rs.getString("ping_date");
 				
-				ResponseCode responseCode = new ResponseCode(pid, serviceId, rid);
+				ResponseCode responseCode = new ResponseCode(pid, serviceId, rid, date);
 				responseCodes.add(responseCode);
 			}
 		} catch (SQLException sqle) {
